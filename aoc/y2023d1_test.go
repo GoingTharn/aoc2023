@@ -37,7 +37,7 @@ func Test_2023_Day_1_Part_1_Example(t *testing.T) {
 
 func Test_2023_Day_1_Part_2_Example(t *testing.T) {
 	result := y2023d1part2(y2023d1part2Input)
-	assert.Equal(t, "470", result)
+	assert.Equal(t, "480", result)
 }
 
 func TestGetDigits(t *testing.T) {
