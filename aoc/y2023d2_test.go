@@ -36,5 +36,5 @@ func Test_2023_Day_2_Part_1_Example(t *testing.T) {
 
 func Test_2023_Day_2_Part_2_Example(t *testing.T) {
 	result := y2023d2part2(y2023d2partInput)
-	assert.Equal(t, "still right!", result)
+	assert.Equal(t, "2286", result)
 }
