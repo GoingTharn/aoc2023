@@ -60,79 +60,6 @@ func (r race) getRaceCount() (count int) {
 	return count
 }
 
-// func (r race) bisect_up(low, high int, lastWon bool) (newLow, newHigh int, newWon bool) {
-// 	middle := (high - low) / 2
-// 	// fmt.Printf("high: %d low: %d middle: %d\n", high, low, middle)
-// 	currWin := r.wins(middle)
-// 	if lastWon == currWin {
-// 		return low + middle, high, currWin
-// 	} else {
-// 		return low, middle, currWin
-// 	}
-// }
-
-// func (r race) bisect_down(low, high int, lastWon bool) (newLow, newHigh int, newWon bool) {
-// 	middle := (high - low) / 2
-// 	// fmt.Printf("high: %d low: %d middle: %d\n", high, low, middle)
-// 	currWin := r.wins(middle)
-// 	if lastWon == currWin {
-// 		return low, middle, currWin
-// 	} else {
-// 		return low + middle, high, currWin
-// 	}
-// if currWin {
-// 	if lastWon == currWin {
-// 		return low, middle, currWin
-// 	} else {
-// 		return middle, high, currWin
-// 	}
-// } else {
-// 	if lastWon != currWin {
-// 		return middle, high, currWin
-// 	} else {
-// 		return low, middle, currWin
-// 	}
-// }
-// }
-
-func (r race) bisect_left(low, high int, seeking bool) (newLow, newHigh int) {
-	middle := (high - low) / 2
-	currWin := r.wins(middle)
-	fmt.Printf("high: %d low: %d middle: %d\n", high, low, middle)
-	if currWin == seeking {
-		return r.bisect_left(low, middle, seeking)
-	}
-	fmt.Printf("middle: %d High: %d\n", middle, high)
-	return middle, high
-}
-
-func (r race) bisect_right(low, high int, seeking bool) (newLow, newHigh int) {
-	middle := (high - low) / 2
-	// fmt.Printf("high: %d low: %d middle: %d\n", high, low, middle)
-	currWin := r.wins(middle)
-	if currWin == seeking {
-		return r.bisect_right(middle+low, high, seeking)
-	}
-	fmt.Printf("Low: %d Middle: %d\n", low, middle+low)
-	return low, middle + low
-}
-
-func (r race) bisect(starting string, seeking bool, low, high int) (newLow, newHigh int) {
-	fmt.Printf("starting: %s, seeking: %v, low: %d high: %d\n", starting, seeking, low, high)
-	if high-low < 10 {
-		return low, high
-	}
-	if starting == "left" {
-		newLow, newHigh = r.bisect_left(low, high, seeking)
-		fmt.Printf("back from left Low: %d High: %d\n", newLow, newHigh)
-		return r.bisect("right", !seeking, newLow, newHigh)
-	} else {
-		newLow, newHigh = r.bisect_right(low, high, seeking)
-		fmt.Printf("back from right Low: %d High: %d\n", newLow, newHigh)
-		return r.bisect("left", !seeking, newLow, newHigh)
-	}
-}
-
 func y2023d6part2(input string) string {
 	splits := strings.Split(input, "\n")
 	var this []rune
@@ -152,16 +79,32 @@ func y2023d6part2(input string) string {
 	fmt.Println(time, dist)
 
 	r := race{time: time, distance: dist}
+
 	var low int
-	low, _ = r.bisect("left", true, 0, r.time)
-	lowBound := r.up(low, true)
+	var lowBound int
 
-	var topBound int
-	low, _ = r.bisect("right", true, 0, r.time)
-	topBound = r.up(low, false)
+	var high int
+	var highBound int
 
-	fmt.Printf("Low: %d Top: %d\n", lowBound, topBound)
-	val := topBound - lowBound
+	var notWinning bool = true
+	for i := 1; notWinning; i = i + 10000 {
+		if r.wins(i) {
+			low = i
+			notWinning = false
+		}
+	}
+	lowBound = r.down(low, false)
+
+	notWinning = true
+	for i := r.time; notWinning; i = i - 10000 {
+		if r.wins(i) {
+			high = i
+			notWinning = false
+		}
+	}
+	highBound = r.up(high, false)
+
+	val := highBound - lowBound - 1
 	return fmt.Sprint(val)
 }
 
