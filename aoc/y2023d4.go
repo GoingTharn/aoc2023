@@ -2,7 +2,6 @@ package aoc
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/samber/lo"
@@ -33,22 +32,6 @@ func NewScratchCard(cardNum int, line string) (sc ScratchCard) {
 	sc.candidate = stringsToInts(candidate)
 	sc.cardNumber = cardNum + 1
 	return sc
-}
-
-func stringsToInts(input []string) []int {
-	var out []int
-	for _, cand := range input {
-		if len(strings.TrimSpace(cand)) == 0 {
-			continue
-		}
-		asInt, err := strconv.Atoi(cand)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		out = append(out, asInt)
-	}
-	return out
 }
 
 func Score(matchNum int) int {

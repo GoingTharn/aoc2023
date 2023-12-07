@@ -1,4 +1,4 @@
-module github.com/jstern/aoc2023
+module github.com/goingtharn/aoc2023
 
 go 1.21.3
 

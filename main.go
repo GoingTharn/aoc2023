@@ -16,7 +16,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 
-	"github.com/jstern/aoc2023/aoc"
+	"github.com/goingtharn/aoc2023/aoc"
 )
 
 func main() {
