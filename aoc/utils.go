@@ -27,3 +27,13 @@ func splitThenConvert(line string, headerSplit string) []int {
 	idx := strings.Index(line, headerSplit) + 1
 	return stringsToInts(strings.Split(line[idx:], " "))
 }
+
+func count[T any](slice []T, f func(T) bool) int {
+	count := 0
+	for _, s := range slice {
+		if f(s) {
+			count++
+		}
+	}
+	return count
+}
